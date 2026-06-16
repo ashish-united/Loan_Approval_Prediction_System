@@ -4,6 +4,9 @@ import numpy as np
 import pickle
 import os
 import plotly.express as px
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from imblearn.over_sampling import SMOTE
+from sklearn.ensemble import RandomForestClassifier
 
 # Set page config for a premium wide layout
 st.set_page_config(
@@ -758,6 +761,64 @@ elif page == "History":
             file_name="session_prediction_history.csv",
             mime="text/csv"
         )
+
+elif page == "Train":
+    st.markdown("### ⚙️ Train Model")
+    st.markdown("Re-train the lending approval model using the latest historical dataset.")
+    
+    if st.button("Start Training", type="primary"):
+        with st.status("Training Model...", expanded=True) as status:
+            st.write("Loading dataset...")
+            df = load_historical_data()
+            if df is None:
+                st.error("Dataset not found. Please ensure 'loan_dataset_20000.csv' is available.")
+                status.update(label="Training failed", state="error", expanded=True)
+            else:
+                try:
+                    st.write("Splitting features and target...")
+                    X = df.drop('loan_paid_back', axis=1)
+                    y = df['loan_paid_back']
+                    
+                    st.write("Encoding categorical features...")
+                    label_encoders = {}
+                    categorical_cols = X.select_dtypes(include=['object', 'str']).columns
+                    for col in categorical_cols:
+                        le = LabelEncoder()
+                        X[col] = le.fit_transform(X[col])
+                        label_encoders[col] = le
+                        
+                    st.write("Scaling features...")
+                    scaler = StandardScaler()
+                    X_scaled = scaler.fit_transform(X)
+                    
+                    st.write("Balancing classes with SMOTE...")
+                    smote = SMOTE(random_state=42)
+                    X_balanced, y_balanced = smote.fit_resample(X_scaled, y)
+                    
+                    st.write("Training Random Forest Classifier...")
+                    rf_model = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
+                    rf_model.fit(X_balanced, y_balanced)
+                    
+                    st.write("Saving model and preprocessors to model.pkl...")
+                    model_data = {
+                        'model': rf_model,
+                        'scaler': scaler,
+                        'label_encoders': label_encoders,
+                        'feature_cols': list(X.columns)
+                    }
+                    
+                    with open('model.pkl', 'wb') as f:
+                        pickle.dump(model_data, f)
+                    
+                    # Clear caches so the app loads the new model
+                    st.cache_resource.clear()
+                    
+                    status.update(label="Model trained and saved successfully!", state="complete", expanded=False)
+                    st.success("Training complete! The new model is now active.")
+                    st.balloons()
+                except Exception as e:
+                    st.error(f"Error during training: {e}")
+                    status.update(label="Training failed", state="error", expanded=True)
 
 elif page == "About":
     st.markdown("### 📚 About LendIQ Platform")
