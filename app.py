@@ -10,7 +10,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 # Set page config for a premium wide layout
 st.set_page_config(
-    page_title="LendIQ | Dashboard",
+    page_title="ApprovaAI | Dashboard",
     page_icon="💼",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -264,8 +264,8 @@ col_logo, col_dash, col_pred, col_ana, col_hist, col_about, col_status = st.colu
 with col_logo:
     st.markdown("""
     <div style="display: flex; align-items: center; gap: 10px; padding-top: 5px;">
-        <div style="background-color: #2563EB; color: white; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; border-radius: 8px; font-size: 1.2rem;">L</div>
-        <span style="font-weight: 700; font-size: 1.3rem; color: #0F172A; letter-spacing: -0.02em;">LendIQ</span>
+        <div style="background-color: #2563EB; color: white; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; border-radius: 8px; font-size: 1.2rem;">A</div>
+        <span style="font-weight: 700; font-size: 1.3rem; color: #0F172A; letter-spacing: -0.02em;">ApprovaAI</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -322,7 +322,7 @@ if page == "Dashboard":
     # 1. Top Card Gradient Banner
     st.markdown("""
     <div style="background: linear-gradient(135deg, #1E3A8A 0%, #1E1B4B 100%); border-radius: 16px; padding: 30px; color: white; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(30, 58, 138, 0.15);">
-        <h1 style="margin: 0; font-size: 2.1rem; font-weight: 700; letter-spacing: -0.02em;">LendIQ Loan Approval Intelligence Platform</h1>
+        <h1 style="margin: 0; font-size: 2.1rem; font-weight: 700; letter-spacing: -0.02em;">ApprovaAI Loan Approval Intelligence Platform</h1>
         <p style="margin: 8px 0 25px 0; font-size: 1rem; opacity: 0.85; max-width: 800px; font-weight: 400; line-height: 1.5;">
             Enterprise-grade MI system trained on 20,000 real loan records. Predict approval probability, analyse risk factors, & data driven lending decisions.
         </p>
@@ -821,16 +821,16 @@ elif page == "Train":
                     status.update(label="Training failed", state="error", expanded=True)
 
 elif page == "About":
-    st.markdown("### 📚 About LendIQ Platform")
+    st.markdown("### 📚 About ApprovaAI Platform")
     
     tab_overview, tab_metrics = st.tabs(["📋 Platform Overview", "📈 Model Performance"])
     
     with tab_overview:
         st.markdown("""
-        LendIQ is an advanced AI credit decision support platform built to streamline credit analysis.
+        ApprovaAI is an advanced AI credit decision support platform built to streamline credit analysis.
         
         #### 💡 Core Engine
-        Under the hood, LendIQ evaluates applicant profiles across a trained **Random Forest Classifier** trained on `loan_dataset_20000.csv`. 
+        Under the hood, ApprovaAI evaluates applicant profiles across a trained **Random Forest Classifier** trained on `loan_dataset_20000.csv`. 
         The preprocessing pipelines are saved in a binary pickle file containing the fitted `StandardScaler` and `LabelEncoder` objects.
         
         #### ⚖️ Compliance & Governance
